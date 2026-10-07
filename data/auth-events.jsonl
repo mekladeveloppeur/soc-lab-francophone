@@ -1,0 +1,7 @@
+{"event_id":"LAB-AUTH-001","timestamp":"2026-10-06T15:02:10Z","username":"agent.demo","source_ip":"203.0.113.77","outcome":"failure","auth_method":"password","asset":"auth-lab-01"}
+{"event_id":"LAB-AUTH-002","timestamp":"2026-10-06T15:02:48Z","username":"support.demo","source_ip":"203.0.113.77","outcome":"failure","auth_method":"password","asset":"auth-lab-01"}
+{"event_id":"LAB-AUTH-003","timestamp":"2026-10-06T15:03:36Z","username":"finance.demo","source_ip":"203.0.113.77","outcome":"failure","auth_method":"password","asset":"auth-lab-01"}
+{"event_id":"LAB-AUTH-004","timestamp":"2026-10-06T15:04:22Z","username":"admin.demo","source_ip":"203.0.113.77","outcome":"failure","auth_method":"password","asset":"auth-lab-01"}
+{"event_id":"LAB-AUTH-005","timestamp":"2026-10-06T15:05:04Z","username":"agent.demo","source_ip":"203.0.113.77","outcome":"failure","auth_method":"password","asset":"auth-lab-01"}
+{"event_id":"LAB-AUTH-006","timestamp":"2026-10-06T15:07:31Z","username":"support.demo","source_ip":"203.0.113.77","outcome":"success","auth_method":"password","asset":"auth-lab-01"}
+{"event_id":"LAB-AUTH-007","timestamp":"2026-10-06T15:09:15Z","username":"analyst.demo","source_ip":"198.51.100.24","outcome":"success","auth_method":"password","asset":"auth-lab-01"}
