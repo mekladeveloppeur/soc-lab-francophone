@@ -1,74 +1,56 @@
-# SOC Lab Francophone
+# Abdoulkader Abdila Mohamed — Analyste SOC
 
-Laboratoire pédagogique en français consacré à la surveillance SOC, au triage SIEM, à l'investigation et à la remédiation d'un audit OWASP.
+Portfolio professionnel en français et dépôt de démonstrations techniques.
 
-> **Périmètre de sécurité :** tous les noms, adresses IP, journaux, alertes et constats de ce dépôt sont fictifs. Ce laboratoire n'est relié à aucun réseau client et ne contient aucune donnée issue d'une mission réelle. Les scénarios servent à démontrer une méthode, pas à prétendre qu'ils ont été exécutés chez un client.
+**Portfolio en ligne :** https://mekladeveloppeur.github.io/soc-lab-francophone/
 
-## Pourquoi ce projet ?
+Ce dépôt distingue l’expérience professionnelle attestée des exercices techniques publiés. Les exemples du code sont synthétiques ou fictifs ; ils ne constituent pas des preuves de travaux réalisés pour un client.
 
-Le CV et l'attestation mentionnent des compétences et expériences en surveillance SIEM avec Wazuh et Microsoft Sentinel, analyse de journaux, triage d'alertes, réponse aux incidents, MITRE ATT&CK et audit OWASP. Ce dépôt rassemble ces thèmes dans **un projet de portfolio** composé de démonstrations sûres et reproductibles.
+## Expérience professionnelle
 
-## Trois modules complémentaires
+**Djib Data-AI Consulting EURL · Djibouti**
 
-### 1. Détection SIEM et triage SOC
+### Supervision et détection des menaces · 1 septembre 2024 – 28 février 2025
 
-- Journaux d'authentification entièrement synthétiques dans `data/auth-events.jsonl`.
-- Détecteur Python sans dépendance externe : seuil de cinq échecs d'authentification depuis une même adresse IP dans une fenêtre de dix minutes.
-- Exemple de règle Wazuh et requête Microsoft Sentinel dans `detections/`.
-- Alertes mappées à MITRE ATT&CK **T1110 — Brute Force**. Le journal seul ne permet pas de conclure à une sous-technique plus précise.
+- Mise en œuvre d’une architecture de surveillance avec Wazuh et Microsoft Sentinel.
+- Configuration de règles de détection et d’alerte.
+- Analyse de journaux système et réseau.
+- Définition de procédures de réponse aux incidents et formation d’équipes techniques.
 
-### 2. Investigation et réponse aux incidents
+### Audit de sécurité applicative · 1 mars 2025 – 30 juin 2025
 
-- Scénario fictif d'abus d'identifiants.
-- Guide de réponse structuré : validation, collecte des preuves, délimitation, confinement, rétablissement et retour d'expérience.
-- Fiche d'investigation et critères d'escalade dans `docs/runbooks/credential-abuse.md`.
+- Tests d’intrusion et analyse de vulnérabilités applicatives et d’infrastructure.
+- Évaluation selon OWASP et ISO 27001.
+- Rédaction d’un rapport d’audit et de recommandations de remédiation.
 
-### 3. Audit applicatif OWASP et remédiation
+L’attestation a été délivrée le 1 février 2026 ; les missions qu’elle décrit se sont terminées le 30 juin 2025. Aucun emploi après cette date n’est revendiqué ici.
 
-- Cas d'école non connecté à une application réelle, avec constats illustratifs, impact, preuves simulées et recommandations.
-- Contrôles alignés sur des catégories OWASP Top 10 (2021) et principes ISO 27001.
-- Aucun test d'intrusion réel ni payload d'exploitation n'est inclus.
+## Démonstrations techniques du dépôt
 
-## Démarrer le détecteur local
+- **Détection SOC :** événements synthétiques, script Python de détection de tentatives par force brute, exemple de règle Wazuh et requête KQL pour Sentinel.
+- **Réponse à incident :** scénario fictif et runbook pédagogique.
+- **Sécurité applicative :** étude OWASP fictive, sans test sur une cible réelle.
 
-Prérequis : Python 3.10 ou ultérieur. Le détecteur utilise uniquement la bibliothèque standard.
+Ces ressources sont des démonstrations indépendantes. Elles ne proviennent pas des missions professionnelles et ne reproduisent aucun journal, constat, rapport ou environnement client.
+
+## Lancer les exemples
+
+Prérequis : Python 3.10 ou ultérieur.
 
 ```bash
 python3 tools/detect_bruteforce.py data/auth-events.jsonl
 python3 -m unittest discover -s tests -v
 ```
 
-Le premier lancement affiche une alerte JSON de démonstration. Pour changer le seuil ou la fenêtre :
+Le détecteur traite uniquement le fichier synthétique fourni et écrit sa sortie dans le terminal. Il ne se connecte à aucun système.
 
-```bash
-python3 tools/detect_bruteforce.py data/auth-events.jsonl --threshold 4 --window-minutes 15
-```
+## Confidentialité et usage responsable
 
-La sortie ne modifie aucun système : le programme lit un fichier local et écrit les alertes sur la sortie standard.
-
-## Arborescence
-
-```text
-data/                       Journaux fictifs au format JSON Lines
-detections/
-  sentinel/                  Exemple de requête KQL
-  wazuh/                     Règle XML pédagogique
-docs/
-  architecture.md            Flux de données et limites du laboratoire
-  runbooks/                  Procédure de réponse aux incidents
-  audit/                     Exemple de constats OWASP et remédiations
-tools/                       Détecteur Python en lecture seule
-tests/                       Tests unitaires sur données synthétiques
-```
-
-## Limites et usage responsable
-
-- N'importez pas de journaux clients, de données personnelles, de secrets ou d'adresses IP réelles.
-- N'exécutez pas de tests sur un système sans autorisation écrite et un périmètre défini.
-- Les fichiers Wazuh et KQL sont des exemples à adapter et valider dans un environnement de laboratoire autorisé.
-- Une alerte de brute force constitue un signal à investiguer, pas une preuve d'intrusion.
-- Les cas OWASP sont des exercices de documentation ; ils ne constituent pas un rapport d'audit réel.
+- Les clients, plateformes, cibles, données et constats sensibles ne sont pas publiés.
+- Les journaux du dépôt sont synthétiques ; n’y ajoutez pas de données personnelles, de secrets ni de journaux clients.
+- N’exécutez des tests de sécurité que sur des systèmes pour lesquels vous avez une autorisation et un périmètre défini.
+- Les exemples Wazuh et Sentinel doivent être adaptés et validés dans un environnement autorisé.
 
 ## Licence
 
-Les éléments originaux de ce laboratoire sont distribués sous licence MIT. Les noms de produits et les références à MITRE ATT&CK, OWASP, Wazuh et Microsoft Sentinel identifient des outils ou référentiels tiers et n'impliquent aucune approbation de leur part.
+Les exemples originaux sont distribués sous licence MIT. Les marques Wazuh, Microsoft Sentinel, MITRE ATT&CK, OWASP et ISO appartiennent à leurs détenteurs respectifs.
