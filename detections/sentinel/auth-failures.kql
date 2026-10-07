@@ -1,0 +1,15 @@
+// Exemple à adapter à la table et au schéma réellement disponibles dans un tenant de laboratoire.
+// Aucune donnée du dépôt n'est automatiquement envoyée à Microsoft Sentinel.
+SigninLogs
+| where TimeGenerated > ago(24h)
+| where ResultType != "0"
+| summarize
+    Echecs = count(),
+    ComptesDistincts = dcount(UserPrincipalName),
+    PremierEvenement = min(TimeGenerated),
+    DernierEvenement = max(TimeGenerated)
+    by IPAddress, bin(TimeGenerated, 10m)
+| where Echecs >= 5
+| extend TechniqueMITRE = "T1110 - Brute Force"
+| project DernierEvenement, PremierEvenement, IPAddress, Echecs, ComptesDistincts, TechniqueMITRE
+| order by Echecs desc
