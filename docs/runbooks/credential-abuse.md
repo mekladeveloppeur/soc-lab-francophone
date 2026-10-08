@@ -1,16 +1,18 @@
-# Runbook : rafale d'échecs d'authentification
+# Runbook : rafale d'échecs et succès d'authentification corrélé
 
 **Type :** exercice de laboratoire uniquement  
-**Priorité initiale :** élevée si un succès suit une rafale, sinon à confirmer par le contexte  
+**Priorité initiale :** investigation prioritaire lorsqu'un succès suit la rafale ; ajuster selon le contexte
 **Données :** événements fictifs de `data/auth-events.jsonl`
 
 ## 1. Valider l'alerte
 
 1. Confirmer la période, le seuil, le nombre de comptes visés et l'adresse source.
 2. Vérifier que les événements sont bien des échecs d'authentification et ne sont pas des doublons.
-3. Rechercher un succès ultérieur depuis la même source ou visant les mêmes comptes.
+3. Rechercher un succès ultérieur depuis la même source dans la fenêtre de corrélation ; relever le compte et l'identifiant d'événement.
 4. Comparer à une fenêtre de référence documentée : VPN, tâches automatisées et tests autorisés peuvent produire du bruit.
 5. Consigner les identifiants des événements et conserver les horodatages en UTC.
+
+Un succès corrélé augmente la priorité de l'investigation, mais ne prouve pas à lui seul que l'accès était non autorisé. Les IP du jeu de données sont réservées aux exemples et ne doivent pas être utilisées pour une recherche de réputation réelle.
 
 ## 2. Délimiter l'incident
 
@@ -51,4 +53,5 @@ Motif de clôture / suivi :
 ## Référentiel
 
 - MITRE ATT&CK : T1110 — Brute Force.
+- Ne pas attribuer une sous-technique (password spraying ou credential stuffing) sans éléments suffisants pour la distinguer.
 - Les contrôles de limitation, MFA, verrouillage adaptatif et journalisation doivent être choisis selon le contexte, le risque de déni de service et les exigences de l'organisation.
