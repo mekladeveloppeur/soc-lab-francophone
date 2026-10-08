@@ -42,6 +42,36 @@ class DetectBruteforceTests(unittest.TestCase):
 
         self.assertEqual(detect_bruteforce(events), [])
 
+    def test_correlates_success_after_failure_burst(self) -> None:
+        events = [make_event(i, 5 - i) for i in range(5)]
+        events.append(make_event(5, 0, outcome="success"))
+
+        alerts = detect_bruteforce(events)
+
+        self.assertEqual(len(alerts), 1)
+        self.assertEqual(alerts[0]["success_username"], "user2")
+        self.assertEqual(alerts[0]["success_after_failures"], events[-1]["timestamp"])
+        self.assertEqual(len(alerts[0]["evidence_event_ids"]), 6)
+        self.assertEqual(alerts[0]["evidence_event_ids"][-1], "TEST-5")
+
+    def test_does_not_correlate_success_before_failure_burst(self) -> None:
+        events = [make_event(5, 6, outcome="success")]
+        events.extend(make_event(i, 5 - i) for i in range(5))
+
+        alert = detect_bruteforce(events)[0]
+
+        self.assertIsNone(alert["success_after_failures"])
+        self.assertEqual(len(alert["evidence_event_ids"]), 5)
+
+    def test_does_not_correlate_success_outside_observation_window(self) -> None:
+        events = [make_event(i, 5 - i) for i in range(5)]
+        events.append(make_event(5, -10, outcome="success"))
+
+        alert = detect_bruteforce(events)[0]
+
+        self.assertIsNone(alert["success_after_failures"])
+        self.assertEqual(len(alert["evidence_event_ids"]), 5)
+
     def test_rejects_invalid_threshold(self) -> None:
         with self.assertRaisesRegex(ValueError, "supérieur ou égal à 2"):
             detect_bruteforce([], threshold=1)
