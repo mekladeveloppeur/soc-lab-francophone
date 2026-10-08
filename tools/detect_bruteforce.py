@@ -57,15 +57,18 @@ def detect_bruteforce(
     if window_minutes < 1:
         raise ValueError("La fenêtre doit durer au moins une minute.")
 
+    events_by_ip: dict[str, list[dict[str, Any]]] = defaultdict(list)
     failures_by_ip: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for event in events:
-        if str(event.get("outcome", "")).lower() != "failure":
-            continue
         source_ip = str(event["source_ip"])
         timestamp = event.get("_parsed_timestamp")
         if not isinstance(timestamp, datetime):
             timestamp = parse_timestamp(str(event["timestamp"]), 0)
-        failures_by_ip[source_ip].append({**event, "_parsed_timestamp": timestamp})
+        normalized = {**event, "_parsed_timestamp": timestamp}
+        events_by_ip[source_ip].append(normalized)
+        if str(event.get("outcome", "")).lower() != "failure":
+            continue
+        failures_by_ip[source_ip].append(normalized)
 
     window = timedelta(minutes=window_minutes)
     alerts: list[dict[str, Any]] = []
@@ -81,6 +84,32 @@ def detect_bruteforce(
                 continue
 
             burst = failures[left : right + 1]
+            last_failure = burst[-1]["_parsed_timestamp"]
+            successful_logins = sorted(
+                (
+                    event
+                    for event in events_by_ip[source_ip]
+                    if str(event.get("outcome", "")).lower() == "success"
+                ),
+                key=lambda event: event["_parsed_timestamp"],
+            )
+            follow_up_success = next(
+                (
+                    event
+                    for event in successful_logins
+                    if last_failure
+                    < event["_parsed_timestamp"]
+                    <= last_failure + window
+                ),
+                None,
+            )
+            evidence_event_ids = [
+                str(event.get("event_id", "inconnu")) for event in burst
+            ]
+            if follow_up_success:
+                evidence_event_ids.append(
+                    str(follow_up_success.get("event_id", "inconnu"))
+                )
             alerts.append(
                 {
                     "rule_id": "SOC-AUTH-001",
@@ -93,11 +122,15 @@ def detect_bruteforce(
                     ),
                     "first_seen": burst[0]["timestamp"],
                     "last_seen": burst[-1]["timestamp"],
+                    "success_after_failures": (
+                        follow_up_success["timestamp"] if follow_up_success else None
+                    ),
+                    "success_username": (
+                        follow_up_success.get("username") if follow_up_success else None
+                    ),
                     "mitre_attack": {"id": "T1110", "name": "Brute Force"},
                     "status": "à investiguer",
-                    "evidence_event_ids": [
-                        str(event.get("event_id", "inconnu")) for event in burst
-                    ],
+                    "evidence_event_ids": evidence_event_ids,
                 }
             )
             break
