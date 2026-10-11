@@ -2,7 +2,7 @@
 
 Projet pratique de supervision, détection et réponse aux incidents, avec des exemples reproductibles sur des données synthétiques.
 
-**Démo web :** https://mekladeveloppeur.github.io/soc-lab-francophone/
+**[Ouvrir la démo publiée du laboratoire SOC](https://mekladeveloppeur.github.io/soc-lab-francophone/)**
 
 ![Aperçu de la console du laboratoire SOC, sur des événements synthétiques](docs/soc-lab-dashboard.jpg)
 
